@@ -14,6 +14,7 @@ typedef struct Pixel{
 // object struct
 typedef struct {
   int kind; 
+  double ns;
   union {
     struct {
       double width;
@@ -24,23 +25,21 @@ typedef struct {
       double radius;
 	  double diffuse_color[3];
 	  double specular_color[3];
-	  double ns = 20.0;
     } sphere;
     struct {
       double position[3];
       double normal[3];
 	  double diffuse_color[3];
 	  double specular_color[3];
-	  double ns = 20.0;
     } plane;
 	struct {
 	  double color[3];
 	  double position[3];
 	  double theta;
-	  double radial-a0;
-	  double radial-a1;
-	  double radial-a2;
-	  double angular-a0;   // spotlight only
+	  double radial_a0;
+	  double radial_a1;
+	  double radial_a2;
+	  double angular_a0;   // spotlight only
 	  double direction[3]; // spotlight only
 	} light;
   };
@@ -244,9 +243,15 @@ void read_scene(char* filename) {
 		  skip_ws(json);
 		  expect_c(json, ':');
 		  skip_ws(json);
+		// check for double types in json
 	  	if ((strcmp(key, "width") == 0) ||
 	        (strcmp(key, "height") == 0) ||
-	        (strcmp(key, "radius") == 0)) {
+	        (strcmp(key, "radius") == 0) ||
+			(strcmp(key, "theta") == 0) ||
+			(strcmp(key, "radial-a0") == 0) ||
+			(strcmp(key, "radial-a1") == 0) ||
+			(strcmp(key, "radial-a2") == 0) ||
+			(strcmp(key, "angular-a0") == 0)){
 	    	double value = next_number(json);
 			if(strcmp(key, "width") == 0){
 				if((*object_array[obj]).kind == 0) (*object_array[obj]).camera.width = value;
@@ -257,6 +262,22 @@ void read_scene(char* filename) {
 			else if(strcmp(key, "radius") == 0){
 				(*object_array[obj]).sphere.radius = value;
 			}
+			else if(strcmp(key, "theta") == 0){
+				(*object_array[obj]).light.theta = value;
+			}
+			else if(strcmp(key, "radial-a0") == 0){
+				(*object_array[obj]).light.radial_a0 = value;
+			}
+			else if(strcmp(key, "radial-a1") == 0){
+				(*object_array[obj]).light.radial_a1 = value;
+			}
+			else if(strcmp(key, "radial-a2") == 0){
+				(*object_array[obj]).light.radial_a2 = value;
+			}
+			else if(strcmp(key, "angular-a0") == 0){
+				(*object_array[obj]).light.angular_a0 = value;
+			}
+			// check for vector types in json
 	  	} else if ((strcmp(key, "color") == 0) ||
 		    (strcmp(key, "position") == 0) ||
 		    (strcmp(key, "normal") == 0)) {
@@ -293,6 +314,7 @@ void read_scene(char* filename) {
 	  exit(1);
 	}
       }
+	  (*object_array[obj]).ns = 20.0;
       skip_ws(json);
       c = next_c(json);
       if (c == ',') {
@@ -339,7 +361,7 @@ int main(int argc, char **argv) {
 		if (object_array[i]->kind == 0){
 			w = object_array[i]->camera.width;
   		h = object_array[i]->camera.height;
-			printf("Camera found and variables set.\n");
+			//printf("Camera found and variables set.\n");
 			break;
 		}
 		i++;
