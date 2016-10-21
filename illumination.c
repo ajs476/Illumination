@@ -14,7 +14,6 @@ typedef struct Pixel{
 // object struct
 typedef struct {
   int kind; 
-  double color[3];
   union {
     struct {
       double width;
@@ -23,11 +22,25 @@ typedef struct {
     struct {
       double position[3];
       double radius;
+	  double diffuse_color[3];
+	  double specular_color[3];
     } sphere;
     struct {
       double position[3];
       double normal[3];
+	  double diffuse_color[3];
+	  double specular_color[3];
     } plane;
+	struct {
+	  double color[3];
+	  double position[3];
+	  double theta;
+	  double radial-a0;
+	  double radial-a1;
+	  double radial-a2;
+	  double angular-a0;   // spotlight only
+	  double direction[3]; // spotlight only
+	} light;
   };
 } Object;
 
