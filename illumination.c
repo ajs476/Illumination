@@ -277,15 +277,19 @@ void read_scene(char* filename) {
 			else if(strcmp(key, "angular-a0") == 0){
 				(*object_array[obj]).light.angular_a0 = value;
 			}
-			// check for vector types in json
+		// check for vector types in json
 	  	} else if ((strcmp(key, "color") == 0) ||
 		    (strcmp(key, "position") == 0) ||
-		    (strcmp(key, "normal") == 0)) {
+		    (strcmp(key, "normal") == 0) ||
+			(strcmp(key, "direction") == 0) ||
+			(strcmp(key, "diffuse_color") == 0) ||
+			(strcmp(key, "specular_color") == 0)) {
 	    	double* value = next_vector(json);
 			if(strcmp(key, "color") == 0){
-				(*object_array[obj]).color[0] = value[0];
-				(*object_array[obj]).color[1] = value[1];
-				(*object_array[obj]).color[2] = value[2];
+				// lights color being set
+				(*object_array[obj]).light.color[0] = value[0];
+				(*object_array[obj]).light.color[1] = value[1];
+				(*object_array[obj]).light.color[2] = value[2];
 			}
 			else if(strcmp(key, "position") == 0){
 				if((*object_array[obj]).kind == 1){
@@ -303,6 +307,39 @@ void read_scene(char* filename) {
 				(*object_array[obj]).plane.normal[0] = value[0];
 				(*object_array[obj]).plane.normal[1] = value[1];
 				(*object_array[obj]).plane.normal[2] = value[2];
+			}
+			else if(strcmp(key, "direction") == 0){
+				(*object_array[obj]).light.direction[0] = value[0];
+				(*object_array[obj]).light.direction[1] = value[1];
+				(*object_array[obj]).light.direction[2] = value[2];
+			}
+			else if(strcmp(key, "diffuse_color") == 0){
+				if((*object_array[obj]).kind == 1){
+					// diffuse color of a sphere
+					(*object_array[obj]).sphere.diffuse_color[0] = value[0];
+					(*object_array[obj]).sphere.diffuse_color[1] = value[1];
+					(*object_array[obj]).sphere.diffuse_color[2] = value[2];
+				}
+				if((*object_array[obj]).kind == 2){
+					// diffuse color of a plane
+					(*object_array[obj]).plane.diffuse_color[0] = value[0];
+					(*object_array[obj]).plane.diffuse_color[1] = value[1];
+					(*object_array[obj]).plane.diffuse_color[2] = value[2];
+				}
+			}
+			else if(strcmp(key, "specular_color") == 0){
+				if((*object_array[obj]).kind == 1){
+					// specular color of a sphere
+					(*object_array[obj]).sphere.specular_color[0] = value[0];
+					(*object_array[obj]).sphere.specular_color[1] = value[1];
+					(*object_array[obj]).sphere.specular_color[2] = value[2];
+				}
+				if((*object_array[obj]).kind == 2){
+					// specular color of a plane
+					(*object_array[obj]).plane.specular_color[0] = value[0];
+					(*object_array[obj]).plane.specular_color[1] = value[1];
+					(*object_array[obj]).plane.specular_color[2] = value[2];
+				}
 			}
 	  } else {
 	    fprintf(stderr, "Error: Unknown property, \"%s\", on line %d.\n",
@@ -408,7 +445,7 @@ int main(int argc, char **argv) {
 				}
 				if (t > 0 && t < best_t) {
 					best_t = t;
-					color = object_array[i]->color;
+					//color = object_array[i]->color;
 				}
 			}
 			Pixel new;
