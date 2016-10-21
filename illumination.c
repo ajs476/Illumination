@@ -24,12 +24,14 @@ typedef struct {
       double radius;
 	  double diffuse_color[3];
 	  double specular_color[3];
+	  double ns = 20.0;
     } sphere;
     struct {
       double position[3];
       double normal[3];
 	  double diffuse_color[3];
 	  double specular_color[3];
+	  double ns = 20.0;
     } plane;
 	struct {
 	  double color[3];
@@ -243,8 +245,8 @@ void read_scene(char* filename) {
 		  expect_c(json, ':');
 		  skip_ws(json);
 	  	if ((strcmp(key, "width") == 0) ||
-	      (strcmp(key, "height") == 0) ||
-	      (strcmp(key, "radius") == 0)) {
+	        (strcmp(key, "height") == 0) ||
+	        (strcmp(key, "radius") == 0)) {
 	    	double value = next_number(json);
 			if(strcmp(key, "width") == 0){
 				if((*object_array[obj]).kind == 0) (*object_array[obj]).camera.width = value;
@@ -256,8 +258,8 @@ void read_scene(char* filename) {
 				(*object_array[obj]).sphere.radius = value;
 			}
 	  	} else if ((strcmp(key, "color") == 0) ||
-		     (strcmp(key, "position") == 0) ||
-		     (strcmp(key, "normal") == 0)) {
+		    (strcmp(key, "position") == 0) ||
+		    (strcmp(key, "normal") == 0)) {
 	    	double* value = next_vector(json);
 			if(strcmp(key, "color") == 0){
 				(*object_array[obj]).color[0] = value[0];
