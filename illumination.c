@@ -225,6 +225,10 @@ void read_scene(char* filename) {
       } else if (strcmp(value, "plane") == 0) {
 				(*object_array[obj]).kind = 2;
 				printf("Found plane\n");
+	  } else if (strcmp(value, "light") == 0) {
+
+				(*object_array[obj]).kind = 3;
+				printf("Found light\n");
       } else {
 				fprintf(stderr, "Error: Unknown type, \"%s\", on line number %d.\n", value, line);
 				exit(1);
