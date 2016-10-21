@@ -1,2 +1,2 @@
 all:
-	gcc raycaster.c -lm -o raycaster
+	gcc illumination.c -lm -o illumination
