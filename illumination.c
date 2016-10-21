@@ -291,28 +291,34 @@ void read_scene(char* filename) {
 				(*object_array[obj]).light.color[1] = value[1];
 				(*object_array[obj]).light.color[2] = value[2];
 			}
+			// check for position property
 			else if(strcmp(key, "position") == 0){
+				// position of sphere
 				if((*object_array[obj]).kind == 1){
 					(*object_array[obj]).sphere.position[0] = value[0];
 					(*object_array[obj]).sphere.position[1] = value[1];
 					(*object_array[obj]).sphere.position[2] = value[2];
 				}
+				// position of plane
 				else if((*object_array[obj]).kind == 2){
 					(*object_array[obj]).plane.position[0] = value[0];
 					(*object_array[obj]).plane.position[1] = value[1];
 					(*object_array[obj]).plane.position[2] = value[2];
 				}
 			}
+			// check for normal property
 			else if(strcmp(key, "normal") == 0){
 				(*object_array[obj]).plane.normal[0] = value[0];
 				(*object_array[obj]).plane.normal[1] = value[1];
 				(*object_array[obj]).plane.normal[2] = value[2];
 			}
+			// check for direction property
 			else if(strcmp(key, "direction") == 0){
 				(*object_array[obj]).light.direction[0] = value[0];
 				(*object_array[obj]).light.direction[1] = value[1];
 				(*object_array[obj]).light.direction[2] = value[2];
 			}
+			// check for diffuse color property 
 			else if(strcmp(key, "diffuse_color") == 0){
 				if((*object_array[obj]).kind == 1){
 					// diffuse color of a sphere
@@ -327,6 +333,7 @@ void read_scene(char* filename) {
 					(*object_array[obj]).plane.diffuse_color[2] = value[2];
 				}
 			}
+			// check for specular color property
 			else if(strcmp(key, "specular_color") == 0){
 				if((*object_array[obj]).kind == 1){
 					// specular color of a sphere
@@ -351,6 +358,7 @@ void read_scene(char* filename) {
 	  exit(1);
 	}
       }
+	  // default ns property to 20 for all objects becuase I can
 	  (*object_array[obj]).ns = 20.0;
       skip_ws(json);
       c = next_c(json);
